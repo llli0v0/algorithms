@@ -3,6 +3,7 @@
  * @return {TreeNode[]}
  */
 function PostOrderTraversal(root) {
+  if (root === null) return [];
   let stack = [root];
   let result = [];
   while (stack.length) {

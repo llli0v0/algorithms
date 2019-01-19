@@ -2,6 +2,10 @@ const { BST } = require('../../../../../../DataStructuresSet');
 const InOrderTraversal = require('../InOrderTraversal');
 
 describe('in order traversal use stack', () => {
+  it('should can detail empty tree', () => {
+    let bst = new BST();
+    expect(InOrderTraversal(bst.root)).toEqual([]);
+  });
   it('should traversal use stack', () => {
     let bst = new BST();
     bst.insert(10);

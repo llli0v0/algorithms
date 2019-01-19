@@ -3,6 +3,7 @@
  * @return {TreeNode[]}
  */
 function PreOrderTraversal(root) {
+  if (root === null) return [];
   let stack = [];
   let result = [];
   let current = root;

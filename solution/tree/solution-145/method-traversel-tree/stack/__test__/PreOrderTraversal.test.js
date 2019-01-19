@@ -2,6 +2,10 @@ const { BST } = require('../../../../../../DataStructuresSet');
 const PreOrderTraversal = require('../PreOrderTraversal');
 
 describe('pre-order-traversal', () => {
+  it('should can detail empty tree', () => {
+    let bst = new BST();
+    expect(PreOrderTraversal(bst.root)).toEqual([]);
+  });
   it('should traversal tree pre order', () => {
     let bst = new BST();
     bst.insert(10);
