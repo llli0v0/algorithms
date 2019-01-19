@@ -3,6 +3,7 @@
  * @return {TreeNode[]}
  */
 function PostOrderTraversal(root) {
+  if (root === null) return [];
   let result = [];
   function traversal(root) {
     if (root === null) return;
