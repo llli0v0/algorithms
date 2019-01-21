@@ -1,0 +1,22 @@
+{
+  "name": "lee",
+  "version": "1.0.0",
+  "description": "I tried my best to solve every problem.",
+  "main": "DataStructuresSet.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llli0v0/lee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/llli0v0/lee/issues"
+  },
+  "homepage": "https://github.com/llli0v0/lee#readme",
+  "dependencies": {
+    "jest": "^23.6.0"
+  }
+}
