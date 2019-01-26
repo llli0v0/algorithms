@@ -25,7 +25,8 @@ var findAllConcatenatedWordsInADict = function(words) {
   }
   function checkThisWord(word, index) {
     let current = Trie;
-    if (index === 1398) debugger;
+    // if (index === 1398) debugger;
+    // This is an interesting bug if I use {} to cache
     cache.has(word) && handleFound();
     for (let i = 0; i < word.length; i++) {
       if (current[word[i]] === undefined || stopCheckThisWord) return;
