@@ -1,4 +1,4 @@
-const { solution } = require('../maxSumOfThreeSubarrays');
+const { solution } = require('../solution');
 
 describe('it should find maximum sum of 3 non overlapping subarrays', () => {
   it('1. should find when k = 2 and length of nums is 6', () => {
