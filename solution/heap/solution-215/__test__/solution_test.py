@@ -3,7 +3,7 @@ import sys
 sys.path.append('..')
 from _solution import Solution
 
-class TestFindKthLargest:
+class TestFindKthLargest(unittest.TestCase):
 
     def test_findKthLargest(self):
         s = Solution()
