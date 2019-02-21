@@ -22,24 +22,20 @@ var calculate = function(s) {
   for (let i = 0; i < sContainer.length; i++) {
     if (sContainer[i] === '-' || sContainer[i] === '+' || sContainer[i] === '(') {
       stack.push(sContainer[i]);
-      continue;
-    }
-    if (stack[stack.length - 1] === '-' || stack[stack.length - 1] === '+') {
+    } else if (stack[stack.length - 1] === '-' || stack[stack.length - 1] === '+') {
       let tail = stack.splice(stack.length - 2);
       if (tail[1] === '-') stack.push(tail[0] - sContainer[i]);
       if (tail[1] === '+') stack.push(tail[0] + sContainer[i]);
-      continue;
-    }
-    if (sContainer[i] === ')') {
+    } else if (sContainer[i] === ')') {
       stack.splice(stack.length - 2, 1);
       if (stack[stack.length - 2] === '-' || stack[stack.length - 2] === '+') {
         let tail = stack.splice(stack.length - 3);
         if (tail[1] === '-') stack.push(tail[0] - tail[2]);
         if (tail[1] === '+') stack.push(tail[0] + tail[2]);
       }
-      continue;
+    } else {
+      stack.push(sContainer[i]);
     }
-    stack.push(sContainer[i]);
   }
   return stack[0];
 };
