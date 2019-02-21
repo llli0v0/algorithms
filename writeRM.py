@@ -10,6 +10,4 @@ for i in range(1, 1000):
         num = '0' + str(i)
     else:
         num = str(i)
-    if i % 3 == 1:
-        f.write('\n')
-    f.write(num + '.                               ')
+    f.write(num + '.\n')
