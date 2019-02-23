@@ -3,5 +3,5 @@ node_modules
 package-lock.json
 n.js
 n.py
-n.test.js
+n.cpp
 *.py[cod]
