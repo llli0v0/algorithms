@@ -59,8 +59,7 @@ var minPatches = function(nums, n) {
     }
   }
   while (currentMax < n) {
-    nums.push(currentMax * 2 + 1);
-    currentMax = nums[nums.length - 1];
+    currentMax = currentMax * 2 + 1;
     result++;
   }
   return result;
