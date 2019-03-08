@@ -3,7 +3,14 @@
  * @return {number}
  */
 var longestIncreasingPath = function(matrix) {
-  let vertexSet = [], edgeSet = {};
+  let vertexSet = [], edgeSet = {}, visited = {}, stack = [], result = 0, found = {};
+  build();
+  topSort();
+  for (let i = 0; i < stack.length; i++) {
+    let current = findNext(stack[i]);
+    result = current > result ? current : result;
+  }
+  return result;
   function build() {
     for (let i = 0; i < matrix.length; i++) {
       for (let j = 0; j < matrix[i].length; j++) {
@@ -29,7 +36,6 @@ var longestIncreasingPath = function(matrix) {
       }
     }
   }
-  let visited = {}, stack = [];
   function topSort() {
     for (let i = 0; i < vertexSet.length; i++) {
       if (!visited[vertexSet[i]]) topSortUtil(vertexSet[i]);
@@ -43,7 +49,6 @@ var longestIncreasingPath = function(matrix) {
     }
     stack.unshift(current);
   }
-  let found = {};
   function findNext(currentKey) {
     if (edgeSet[currentKey] === undefined) return 1;
     if (found[currentKey] !== undefined) return found[currentKey];
@@ -55,14 +60,6 @@ var longestIncreasingPath = function(matrix) {
     found[currentKey] = currentMax;
     return currentMax;
   }
-  build();
-  topSort();
-  let result = 0;
-  for (let i = 0; i < stack.length; i++) {
-    let current = findNext(stack[i]);
-    result = current > result ? current : result;
-  }
-  return result;
 };
 
 module.exports = { solution: longestIncreasingPath };
