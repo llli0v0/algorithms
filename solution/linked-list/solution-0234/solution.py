@@ -4,6 +4,7 @@
 #         self.val = x
 #         self.next = None
 
+# better solution is flow fast point
 class Solution:
     def isPalindrome(self, head):
         if not head or not head.next: return True
