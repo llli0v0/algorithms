@@ -8,12 +8,14 @@ var multiply = function(num1, num2) {
   let startIndex = matrix[0].length - num1.length;
   for (let i = 0; i < matrix.length; i++) {
     for (let j = num1.length - 1; j >= 0; j--) {
-      let re = String(parseInt(num1[j]) * parseInt(num2[num2.length - 1 - i]) + matrix[num2.length - 1 - i][j + startIndex]);
+      let rowIndex = num2.length - 1 - i;
+      let colIndex = j + startIndex;
+      let re = String(parseInt(num1[j]) * parseInt(num2[rowIndex]) + matrix[rowIndex][colIndex]);
       if (re.length === 1) {
-        matrix[num2.length - 1 - i][j + startIndex] = parseInt(re[0]);
+        matrix[rowIndex][colIndex] = parseInt(re[0]);
       } else {
-        matrix[num2.length - 1 - i][j + startIndex] = parseInt(re[1]);
-        matrix[num2.length - 1 - i][j + startIndex - 1] = parseInt(re[0]);
+        matrix[rowIndex][colIndex] = parseInt(re[1]);
+        matrix[rowIndex][colIndex - 1] = parseInt(re[0]);
       }
     }
     startIndex--;
