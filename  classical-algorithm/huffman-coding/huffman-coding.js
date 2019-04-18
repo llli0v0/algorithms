@@ -1,3 +1,5 @@
+const Heap = require('../../data-structures/heap/heap');
+
 class TreeNode {
   constructor(val) {
     this.val = val;
@@ -18,21 +20,20 @@ class HuffmanTree {
       if (this.counter[str[i]] === undefined) this.counter[str[i]] = 0;
       this.counter[str[i]] += 1;
     }
-    let nodes = [];
+    let heap = new Heap('val');
     for (let key in this.counter) {
-      nodes.push(new TreeNode(this.counter[key]));
-      nodes[nodes.length - 1].key = key;
+      let node = new TreeNode(this.counter[key]);
+      node.key = key;
+      heap.heappush(node);
     }
-    nodes = nodes.sort((a, b) => a.val - b.val);
-    this.root = nodes[0];
-    while (nodes.length > 1) {
-      let l = nodes.shift();
-      let r = nodes.shift();
+    this.root = heap[0];
+    while (heap.heap.length > 1) {
+      let l = heap.heappop();
+      let r = heap.heappop();
       this.root = new TreeNode(l.val + r.val);
       this.root.left = l;
       this.root.right = r;
-      nodes.push(this.root);
-      nodes = nodes.sort((a, b) => a.val - b.val);
+      heap.heappush(this.root);
     }
   }
 }
@@ -59,3 +60,5 @@ class HuffmanEncoding {
     if (node.right) this.getCoding(node.right, s + '1');
   }
 }
+
+module.exports = HuffmanEncoding;

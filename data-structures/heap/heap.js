@@ -1,70 +1,69 @@
-class MinHeap {
-  constructor() {
-    this.heapContainer = [];
-  }
-  add(item) {
-    this.heapContainer.push(item);
-    this.heapifyUp();
-    return this;
-  }
-  heapifyUp() {
-    let currentIndex = this.heapContainer.length - 1;
-    while (
-      this.hasParent(currentIndex) &&
-      this.heapContainer[currentIndex].val < this.heapContainer[this.getParentIndex(currentIndex)].val
-    ) {
-      this.swap(currentIndex, this.getParentIndex(currentIndex));
-      currentIndex = this.getParentIndex(currentIndex);
+class Heap {
+  constructor(key) {
+    this.heap = [];
+    // compare with key, In order to satisfy compare object
+    if (key) {
+      this.comparetor = (a, b) => a[key] - b[key];
+    } else {
+      this.comparetor = (a, b) => a - b;
     }
   }
-  hasParent(childIndex) {
-    return this.getParentIndex(childIndex) >= 0;
+  lessThan(a, b) {
+    return this.comparetor(a, b) < 0;
+  }
+  equal(a, b) {
+    return this.comparetor(a, b) === 0;
+  }
+  biggerThan(a, b) {
+    return this.comparetor(a, b) > 0;
+  }
+  heappush(item) {
+    this.heap.push(item);
+    let index = this.heap.length - 1;
+    let parentIndex = this.getParentIndex(index);
+    while (parentIndex >= 0 && this.biggerThan(this.heap[parentIndex], this.heap[index])) {
+      let temp = this.heap[parentIndex];
+      this.heap[parentIndex] = this.heap[index];
+      this.heap[index] = temp;
+      index = parentIndex;
+      parentIndex = this.getParentIndex(index);
+    }
+  }
+  heappop() {
+    if (this.heap.length <= 1) return this.heap.pop();
+    let popItem = this.heap[0];
+    this.heap[0] = this.heap.pop();
+    let index = 0;
+    let leftChildIndex = this.getLeftChildIndex(index);
+    let rightChildIndex = this.getRightChildIndex(index);
+    while (
+      leftChildIndex < this.heap.length && this.biggerThan(this.heap[index], this.heap[leftChildIndex]) ||
+      rightChildIndex < this.heap.length && this.biggerThan(this.heap[index], this.heap[rightChildIndex])
+    ) {
+      let swapIndex;
+      if (leftChildIndex < this.heap.length && rightChildIndex < this.heap.length) {
+        swapIndex = this.lessThan(this.heap[leftChildIndex], this.heap[rightChildIndex]) ? leftChildIndex : rightChildIndex;
+      } else {
+        swapIndex = leftChildIndex;
+      }
+      let temp = this.heap[index];
+      this.heap[index] = this.heap[swapIndex];
+      this.heap[swapIndex] = temp;
+      index = swapIndex;
+      leftChildIndex = this.getLeftChildIndex(index);
+      rightChildIndex = this.getRightChildIndex(index);
+    }
+    return popItem;
   }
   getParentIndex(childIndex) {
     return Math.floor((childIndex - 1) / 2);
   }
-  swap(index1, index2) {
-    let temp = this.heapContainer[index1];
-    this.heapContainer[index1] = this.heapContainer[index2];
-    this.heapContainer[index2] = temp;
-  }
-  poll() {
-    const item = this.heapContainer[0];
-    this.heapContainer[0] = this.heapContainer.pop();
-    this.heapifyDown();
-    return item;
-  }
-  heapifyDown(index = 0) {
-    let currentIndex = index;
-    let nextIndex = null;
-    while (
-      this.hasLeftChild(currentIndex) &&
-      (
-        this.heapContainer[currentIndex].val > this.heapContainer[this.getLeftChildIndex(currentIndex)].val ||
-        (this.hasRightChild(currentIndex) && this.heapContainer[currentIndex].val > this.heapContainer[this.getRightChildIndex(currentIndex)].val)
-      )
-    ) {
-      if (this.hasRightChild(currentIndex)) {
-        nextIndex = this.getRightChildIndex(currentIndex);
-      } else {
-        nextIndex = this.getLeftChildIndex(currentIndex);
-      }
-      this.swap(currentIndex, nextIndex);
-      currentIndex = nextIndex;
-    }
-  }
   getLeftChildIndex(parentIndex) {
-    return (2 * parentIndex) + 1;
+    return parentIndex * 2 + 1;
   }
   getRightChildIndex(parentIndex) {
-    return (2 * parentIndex) + 2;
-  }
-  hasLeftChild(parentIndex) {
-    return this.getLeftChildIndex(parentIndex) < this.heapContainer.length;
-  }
-  hasRightChild(parentIndex) {
-    return this.getRightChildIndex(parentIndex) < this.heapContainer.length;
+    return parentIndex * 2 + 2;
   }
 }
 
-module.exports = { MinHeap: MinHeap };
+module.exports = Heap;
