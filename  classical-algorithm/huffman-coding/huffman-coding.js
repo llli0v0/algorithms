@@ -24,6 +24,7 @@ class HuffmanTree {
       nodes[nodes.length - 1].key = key;
     }
     nodes = nodes.sort((a, b) => a.val - b.val);
+    this.root = nodes[0];
     while (nodes.length > 1) {
       let l = nodes.shift();
       let r = nodes.shift();
@@ -36,13 +37,25 @@ class HuffmanTree {
   }
 }
 
-function getHuffmanCoding(str) {
-  let huffmanTree = new HuffmanTree(str);
-  let codeDict = huffmanTree.counter;
-  getCoding(huffmanTree.root, '');
-  return codeDict;
+class HuffmanEncoding {
+  constructor() {
+    this.codeDict = {};
+  }
+
+  getHuffmanCoding(str) {
+    let huffmanTree = new HuffmanTree(str);
+    this.codeDict = huffmanTree.counter;
+    this.getCoding(huffmanTree.root, '');
+    let codeStr = '';
+    for (let i = 0; i < str.length; i++) {
+      codeStr += this.codeDict[str[i]];
+    }
+    return codeStr;
+  }
+
+  getCoding(node, s) {
+    if (!node.left && !node.right) this.codeDict[node.key] = s || '1';
+    if (node.left) this.getCoding(node.left, s + '0');
+    if (node.right) this.getCoding(node.right, s + '1');
+  }
 }
-
-
-
-getHuffmanCoding('llsdfjijisjdfsjiaiohehsdfh');
