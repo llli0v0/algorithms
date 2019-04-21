@@ -11,6 +11,9 @@ class RedBlackTree {
   constructor() {
     this.root = null;
   }
+  remove() {
+    // not implemented, Do a little later
+  }
   insert(val, root = this.root) {
     if (!this.root) {
       this.root = new TreeNode(val);
@@ -44,7 +47,7 @@ class RedBlackTree {
     }
     if (node.parent.color === 'BLACK') return;
     let uncle = this.getUncle(node);
-    if (uncle.color === 'RED') {
+    if (uncle && uncle.color === 'RED') {
       uncle.color = 'BLACK';
       node.parent.color = 'BLACK';
       node.parent.parent.color = 'RED';
@@ -55,20 +58,26 @@ class RedBlackTree {
         if (side === 'right') {
           this.rotateRight(node.parent);
           node.parent.color = 'BLACK';
+          node.parent.left.color = 'RED';
           node.parent.right.color = 'RED';
         } else {
           this.rotateLeft(node.parent);
           node.parent.color = 'BLACK';
           node.parent.left.color = 'RED';
+          node.parent.right.color = 'RED';
         }
       } else {
         if (node.parent.left === node) {
           this.rotateRight(node);
           this.rotateLeft(node);
+          node.color = 'BLACK';
           node.left.color = 'RED';
+          node.right.color = 'RED';
         } else {
           this.rotateLeft(node);
           this.rotateRight(node);
+          node.color = 'BLACK';
+          node.left.color = 'RED';
           node.right.color = 'RED';
         }
       }
@@ -77,24 +86,42 @@ class RedBlackTree {
   rotateLeft(node) {
     let grandParent = node.parent.parent;
     let parent = node.parent;
-    let nodeLeft = node.left;
-    node.parent = grandParent;
-    grandParent.left = node;
-    parent.parent = node;
-    node.left = parent;
-    nodeLeft.parent = parent;
-    parent.right = nodeLeft;
+    let nodeRight = node.right;
+    if (grandParent) {
+      node.parent = grandParent;
+      grandParent.left = node;
+      node.right = parent;
+      node.right.parent = node;
+      parent.left = nodeRight;
+      if (nodeRight) nodeRight.parent = parent;
+    } else {
+      this.root = node;
+      parent.parent = this.root;
+      parent.left = nodeRight;
+      node.right = parent;
+      node.parent = null;
+      if (nodeRight) nodeRight.parent = parent;
+    }
   }
   rotateRight(node) {
     let grandParent = node.parent.parent;
     let parent = node.parent;
-    let nodeRight = node.right;
-    node.parent = grandParent;
-    grandParent.right = node;
-    parent.parent = node;
-    node.right = parent;
-    nodeRight.parent = parent;
-    parent.left = nodeRight;
+    let nodeLeft = node.left;
+    if (grandParent) {
+      node.parent = grandParent;
+      grandParent.right = node;
+      node.left = parent;
+      node.left.parent = node;
+      parent.right = nodeLeft;
+      if (nodeLeft) nodeLeft.parent = parent;
+    } else {
+      this.root = node;
+      parent.parent = this.root;
+      parent.right = nodeLeft;
+      node.left = parent;
+      node.parent = null;
+      if (nodeLeft) nodeLeft.parent = parent;
+    }
   }
   getUncle(node) {
     let grandParent = node.parent.parent;
@@ -109,16 +136,19 @@ class RedBlackTree {
    */
   isSameSide(node) {
     let nodeSide = node.parent.left === node ? 'left' : 'right';
-    let parentSide = node.parent.parent.left === node.parent ? 'left' : right;
+    let parentSide = node.parent.parent.left === node.parent ? 'left' : 'right';
     return nodeSide === parentSide ? nodeSide : false;
   }
 }
 
 let tree = new RedBlackTree();
-tree.insert(5);
-tree.insert(10);
-tree.insert(15);
-tree.insert(20);
-tree.insert(25);
-tree.insert(30);
+tree.insert(10); // b
+tree.insert(-10); // r
+tree.insert(20); // b
+tree.insert(-20); // b
+tree.insert(6); // b
+tree.insert(15); // r
+tree.insert(25); // r
+tree.insert(2); // r
+tree.insert(8); // r
 console.log(tree);
