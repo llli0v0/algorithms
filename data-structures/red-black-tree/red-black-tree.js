@@ -17,13 +17,13 @@ class RedBlackTree {
   insert(val, root = this.root) {
     if (!this.root) {
       this.root = new TreeNode(val);
-      this.root.color = 'BLACK';
+      this.root.color = 'B';
       return;
     }
     if (val < root.val) {
       if (!root.left) {
         root.left = new TreeNode(val);
-        root.left.color = 'RED';
+        root.left.color = 'R';
         root.left.parent = root;
         this.balance(root.left);
       } else {
@@ -32,7 +32,7 @@ class RedBlackTree {
     } else {
       if (!root.right) {
         root.right = new TreeNode(val);
-        root.right.color = 'RED';
+        root.right.color = 'R';
         root.right.parent = root;
         this.balance(root.right);
       } else {
@@ -42,43 +42,71 @@ class RedBlackTree {
   }
   balance(node) {
     if (node === this.root) {
-      node.color = 'BLACK';
+      node.color = 'B';
       return;
     }
-    if (node.parent.color === 'BLACK') return;
+    if (node.parent.color === 'B') return;
     let uncle = this.getUncle(node);
-    if (uncle && uncle.color === 'RED') {
-      uncle.color = 'BLACK';
-      node.parent.color = 'BLACK';
-      node.parent.parent.color = 'RED';
+    if (uncle && uncle.color === 'R') {
+      uncle.color = 'B';
+      node.parent.color = 'B';
+      node.parent.parent.color = 'R';
       this.balance(node.parent.parent);
     } else {
       let side = this.isSameSide(node);
       if (side) {
         if (side === 'right') {
+          /**
+            *             4b                6b
+            *           /  \               /  \
+            *         2b    6r    --->   4r    7r
+            *                \          /
+            *                 7r       2b
+            */
           this.rotateRight(node.parent);
-          node.parent.color = 'BLACK';
-          node.parent.left.color = 'RED';
-          node.parent.right.color = 'RED';
+          node.parent.color = 'B';
+          node.parent.left.color = 'R';
+          node.parent.right.color = 'R';
         } else {
+          /**
+            *             4b              2b
+            *           /  \            /   \
+            *         2r    6b  --->  1r     4r
+            *        /                        \
+            *      1r                          6b
+            */
           this.rotateLeft(node.parent);
-          node.parent.color = 'BLACK';
-          node.parent.left.color = 'RED';
-          node.parent.right.color = 'RED';
+          node.parent.color = 'B';
+          node.parent.left.color = 'R';
+          node.parent.right.color = 'R';
         }
       } else {
         if (node.parent.left === node) {
-          this.rotateRight(node);
+          /**
+            *             4b              4b               5b
+            *           /  \            /  \              /  \
+            *         2b    6r --->   2b    5r   --->   4r   6r
+            *              /                 \         /
+            *             5r                  6r     2b
+            */
           this.rotateLeft(node);
-          node.color = 'BLACK';
-          node.left.color = 'RED';
-          node.right.color = 'RED';
+          this.rotateRight(node);
+          node.color = 'B';
+          node.left.color = 'R';
+          node.right.color = 'R';
         } else {
-          this.rotateLeft(node);
+           /**
+            *             5b              5b             3b
+            *           /  \            /   \           /  \
+            *         2r    6b --->   3r     6b --->  2r    5r
+            *          \             /                       \
+            *           3r         2r                         6r
+            */
           this.rotateRight(node);
-          node.color = 'BLACK';
-          node.left.color = 'RED';
-          node.right.color = 'RED';
+          this.rotateLeft(node);
+          node.color = 'B';
+          node.left.color = 'R';
+          node.right.color = 'R';
         }
       }
     }
@@ -89,7 +117,11 @@ class RedBlackTree {
     let nodeRight = node.right;
     if (grandParent) {
       node.parent = grandParent;
-      grandParent.left = node;
+      if (grandParent.left === parent) {
+        grandParent.left = node;
+      } else {
+        grandParent.right = node;
+      }
       node.right = parent;
       node.right.parent = node;
       parent.left = nodeRight;
@@ -109,7 +141,11 @@ class RedBlackTree {
     let nodeLeft = node.left;
     if (grandParent) {
       node.parent = grandParent;
-      grandParent.right = node;
+      if (grandParent.left === parent) {
+        grandParent.left = node;
+      } else {
+        grandParent.right = node;
+      }
       node.left = parent;
       node.left.parent = node;
       parent.right = nodeLeft;
@@ -129,26 +165,10 @@ class RedBlackTree {
     if (grandParent.left === node.parent) return grandParent.right;
     if (grandParent.right === node.parent) return grandParent.left;
   }
-  /**
-   * 
-   * @param {TreeNode} node 
-   * @returns if no same side return false, else return side
-   */
   isSameSide(node) {
+    // if no same side return false, else return side
     let nodeSide = node.parent.left === node ? 'left' : 'right';
     let parentSide = node.parent.parent.left === node.parent ? 'left' : 'right';
     return nodeSide === parentSide ? nodeSide : false;
   }
 }
-
-let tree = new RedBlackTree();
-tree.insert(10); // b
-tree.insert(-10); // r
-tree.insert(20); // b
-tree.insert(-20); // b
-tree.insert(6); // b
-tree.insert(15); // r
-tree.insert(25); // r
-tree.insert(2); // r
-tree.insert(8); // r
-console.log(tree);
