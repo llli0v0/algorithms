@@ -10,7 +10,7 @@ module.exports = {
   collectCoverage: false,
 
   // The directory where Jest should output its coverage files.
-  collectCoverageFrom: ["*/solution/*.js"],
+  collectCoverageFrom: ["*/*.js"],
 
   // If the test path matches any of the patterns, it will be skipped.
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
