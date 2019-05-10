@@ -24,7 +24,7 @@ function generateTrees(n: number): TreeNode[] {
     }
   }
   return result;
-  function generateSubTrees(start: number, end: number): TreeNode[] {
+  function generateSubTrees(start: number, end: number): (TreeNode | null)[] {
     let subTrees = [];
     if (start > end) return [null];
     for (let i: number = start; i <= end; i++) {
