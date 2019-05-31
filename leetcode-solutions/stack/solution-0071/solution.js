@@ -9,13 +9,10 @@ var simplifyPath = function(path) {
     if (path[i] === '/') {
       if (stack[stack.length - 1] === '..') {
         if (stack.length > 1) stack.splice(stack.length - 3);
-      } else if (stack[stack.length - 1] !== '/') {
-        if (stack[stack.length - 1] === '.') {
-          stack.pop();
-          if (stack.length < 2) continue;
-          stack.pop();
-        }
-        stack.push(path[i]);
+      } else if (stack[stack.length - 1] === '.') {
+        stack.pop();
+      } else {
+        if (stack[stack.length - 1] !== '/') stack.push(path[i]);
       }
     } else {
       if (stack[stack.length - 1] === '/') {
