@@ -1,6 +1,8 @@
 # The answer key leetcode :wink:
 
-I tried my best to solve every problem.
+I'm in the middle of optimization done before. :sunglasses:
+
+I will try my best to solve every problem.
 
 Sometimes I use graphics and words to express my ideas.
 
