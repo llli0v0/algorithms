@@ -2,6 +2,5 @@
 node_modules
 package-lock.json
 n.js
-n.ts
 n.py
 *.py[cod]
