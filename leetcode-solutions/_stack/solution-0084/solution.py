@@ -7,7 +7,7 @@ class Solution:
             while stack and heights[i] < heights[stack[-1]]:
                 result = max(result, heights[stack.pop()] * (i - stack[-1] - 1 if stack else i))
             stack.append(i)
-        result = max(result, heights[stack[0]] * len(heights))
+        if stack: result = max(result, heights[stack[0]] * len(heights))
         for i in range(1, len(stack)):
             result = max(result, heights[stack[i]] * (len(heights) - stack[i - 1] - 1))
         return result

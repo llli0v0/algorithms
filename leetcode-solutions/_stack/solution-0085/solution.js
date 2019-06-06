@@ -21,10 +21,11 @@ var maximalRectangle = function(matrix) {
         currentHistogram[n] = currentHistogram[n] + 1;
       }
     }
-    result = Math.max(result, largestRectangleArea(currentHistogram));
+    result = Math.max(result, helper(currentHistogram));
   }
   return result;
-  function largestRectangleArea(heights) {
+  
+  function helper(heights) {
     if (!heights.length) return 0;
     let stack = [];
     let result = 0;
@@ -34,7 +35,7 @@ var maximalRectangle = function(matrix) {
       }
       stack.push(i);
     }
-    result = Math.max(heights[stack[0]] * heights.length, result);
+    if (stack.length) result = Math.max(heights[stack[0]] * heights.length, result);
     for (let i = 1; i < stack.length; i++) {
       result = Math.max(heights[stack[i]] * (heights.length - stack[i - 1] - 1), result);
     }

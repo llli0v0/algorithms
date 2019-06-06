@@ -1,9 +1,9 @@
-# The answer key leetcode :wink:
+# 这是我的leetcode解答 :wink:
 
-I'm in the middle of optimization done before. :sunglasses:
+我还是写中文吧 :joy:
 
-I will try my best to solve every problem.
+我正在回顾之前做过的题目. :sunglasses:
 
-Sometimes I use graphics and words to express my ideas.
+我会尽力解决每道题目.
 
-There are some problems that I still can't solve after a lot of thinking, I will learn and record what I lack in knowledge.
+正在进行中...... :whale:
