@@ -2,6 +2,13 @@
  * @param {character[][]} matrix
  * @return {number}
  */
+
+ /**
+  * 
+  * 回顾
+  * 
+  * 将问题转化成 84.柱形图的最大矩形面积问题 求解
+  */
 var maximalRectangle = function(matrix) {
   if (!matrix.length) return 0;
   let currentHistogram = Array(matrix[0].length).fill(0);
