@@ -6,7 +6,7 @@
 
 /**
  * 
- * :vomiting:
+ * 想吐
  */
 var checkSubarraySum = function(nums, k) {
   if (k === 0) { 
