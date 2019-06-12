@@ -21,7 +21,7 @@ var strangePrinter = function(s) {
     // 如果k2是独立打印 +1 并且在之后的递归去除k2
     dp[k] = 1 + helper(k1, k2 - 1);
     for (let i = k1; i < k2; i++) {
-      // 如果k1--k2区间内存在与k2相同的字符A，则可以假设k2依赖于A打印，而之后的递归就没有k2什么事情了
+      // 如果k1--k2区间内存在与k2相同的字符A，则可以假设A依赖于k2打印，而之后的递归就没有A什么事情了
       if (S[i] === S[k2]) dp[k] = Math.min(dp[k], helper(k1, i - 1) + helper(i + 1, k2));
     }
     return dp[k];
