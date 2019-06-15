@@ -50,7 +50,6 @@ var countOfAtoms = function(formula) {
   function getStack(a, num) {
     let stack = [];
     for (let i = 0; i < a.length; i++) {
-      if (stack[stack.length - 1] === 'Zr') debugger;
       if (a[i] >= 'a' && a[i] <= 'z' || a[i] >= 'A' && a[i] <= 'Z') {
         if (
           !stack.length ||
