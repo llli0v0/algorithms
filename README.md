@@ -1,6 +1,4 @@
-# 这是我的leetcode解答 :wink:
-
-我还是写中文吧 :joy:
+# 这是我的leetcode解答 :kissing_smiling_eyes:
 
 我正在回顾之前做过的题目. :sunglasses:
 
