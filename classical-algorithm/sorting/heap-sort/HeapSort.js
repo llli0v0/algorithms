@@ -1,4 +1,4 @@
-import Heap from '../../../data-structures/heap/heap';
+import Heap from '../../../data-structures/heap/binary-heap/binary-heap';
 function HeapSort(A) {
   let heap = new Heap();
   let sorted = [];

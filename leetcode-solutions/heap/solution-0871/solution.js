@@ -1,4 +1,4 @@
-const Heap = require('../../../data-structures/heap/heap');
+const Heap = require('../../../data-structures/heap/binary-heap/binary-heap');
 
 /**
  * @param {number} target
