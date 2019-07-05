@@ -14,3 +14,16 @@ var isSubsequence = function(s, t) {
   }
   return false;
 };
+
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {boolean}
+ */
+var isSubsequenceII = function(s, t) {
+  let I = 0;
+  for (let i = 0; i < t.length; i++) {
+    if (t[i] === s[I]) I++;
+  }
+  return I === s.length;
+};
