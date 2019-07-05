@@ -1,6 +1,5 @@
 .vscode
 node_modules
 package-lock.json
-n.js
 n.py
 *.py[cod]
