@@ -2,7 +2,7 @@ class Heap {
   constructor(key) {
     this.heap = [];
     // compare with key, In order to satisfy compare object
-    if (key) {
+    if (key !== undefined) {
       this.comparetor = (a, b) => a[key] - b[key];
     } else {
       this.comparetor = (a, b) => a - b;

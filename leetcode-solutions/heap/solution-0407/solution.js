@@ -1,37 +1,72 @@
 /**
- * @param {string} s
- * @param {number} k
- * @return {string}
+ * @param {number[][]} heightMap
+ * @return {number}
  */
-var rearrangeString = function(s, k) {
-  let heap = new Heap(1);
-  let C = {};
-  for (let i = 0; i < s.length; i++) {
-    if (C[s[i]] === undefined) C[s[i]] = 0;
-    C[s[i]]++;
+var trapRainWater = function(heightMap) {
+  if (!heightMap.length || !heightMap[0].length) return 0;
+
+  let heap = new Heap(0);
+
+  let V = new Set();
+
+  for (let i = 0; i < heightMap[0].length; i++) {
+    let a = [heightMap[0][i], [0, i]];
+    heap.heappush(a);
+    V.add(a[1].join());
   }
-  for (let k in C) {
-    heap.heappush([k, -C[k]]);
+  for (let i = 0; i < heightMap[heightMap.length - 1].length; i++) {
+    let a = [heightMap[heightMap.length - 1][i], [heightMap.length - 1, i]];
+    heap.heappush(a);
+    V.add(a[1].join());
   }
-  let result = [];
+  for (let i = 1; i < heightMap.length - 1; i++) {
+    let a = [heightMap[i][0], [i, 0]];
+    heap.heappush(a);
+    V.add(a[1].join());
+  }
+  for (let i = 1; i < heightMap.length - 1; i++) {
+    let a = [heightMap[i][heightMap[i].length - 1], [i, heightMap[i].length - 1]];
+    heap.heappush(a);
+    V.add(a[1].join());
+  }
+
+  let result = 0;
+
   while (heap.heap.length) {
-    let a = [];
-    let g = result.length - k + 1;
-    let arr = result.slice(g < 0 ? 0 : g);
-    while (true) {
-      let b = heap.heappop();
-      if (b === undefined) return '';
-      a.push(b);
-      if (arr.every(i => i !== b[0])) {
-        result.push(b[0]);
-        b[1]++;
-        if (b[1] === 0) a.pop();
-        while (a.length) heap.heappush(a.pop());
-        break;
+    let a = heap.heappop();
+
+    helper(a[1], a[0]);
+  }
+
+  return result;
+
+  function helper(a, h) {
+    let A = [];
+
+    if (heightMap[a[0] - 1] !== undefined && !V.has([a[0] - 1, a[1]].join())) A.push([a[0] - 1, a[1]]);
+    if (heightMap[a[0] + 1] !== undefined && !V.has([a[0] + 1, a[1]].join())) A.push([a[0] + 1, a[1]]);
+    if (heightMap[a[0]][a[1] - 1] !== undefined && !V.has([a[0], a[1] - 1].join())) A.push([a[0], a[1] - 1]);
+    if (heightMap[a[0]][a[1] + 1] !== undefined && !V.has([a[0], a[1] + 1].join())) A.push([a[0], a[1] + 1]);
+
+    while (A.length) {
+      let b = A.pop();
+
+      if (V.has(b.join())) continue;
+
+      if (heightMap[b[0]][b[1]] <= h) {
+        result += h - heightMap[b[0]][b[1]];;
+
+        if (heightMap[b[0] - 1] !== undefined) A.push([b[0] - 1, b[1]]);
+        if (heightMap[b[0] + 1] !== undefined) A.push([b[0] + 1, b[1]]);
+        if (heightMap[b[0]][b[1] - 1] !== undefined) A.push([b[0], b[1] - 1]);
+        if (heightMap[b[0]][b[1] + 1] !== undefined) A.push([b[0], b[1] + 1]);
+      } else {
+        heap.heappush([heightMap[b[0]][b[1]], [b[0], b[1]]]);
       }
+
+      V.add(b.join());
     }
   }
-  return result.join('');
 };
 
 class Heap {
