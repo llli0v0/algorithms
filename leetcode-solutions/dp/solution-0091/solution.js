@@ -3,24 +3,22 @@
  * @return {number}
  */
 var numDecodings = function(s) {
-  s = s.split('');
-  let ns = [];
-  for (let i = 0; i < s.length; i++) {
+  if (s[0] === '0') return 0;
+
+  let dp = new Array(s.length).fill(0);
+
+  dp[-1] = 1;
+  dp[0] = 1;
+
+  for (let i = 1; i < s.length; i++) {
     if (s[i] === '0') {
-      if (i === 0 || parseInt(ns[ns.length - 1]) > 2) return 0;
-      ns.push(ns.pop() + '0');
+      dp[i] = s[i - 1] === '1' || s[i - 1] === '2' ? dp[i - 2] : 0;
     } else {
-      ns.push(s[i]);
+      dp[i] = dp[i - 1];
+
+      if (s[i - 1] === '1' || s[i - 1] === '2' && s[i] <= '6') dp[i] += dp[i - 2];
     }
   }
-  let sub = {};
-  sub[0] = 1;
-  for (let i = 1; i < ns.length; i++) {
-    sub[i] = 0;
-    sub[i] += sub[i - 1];
-    if (parseInt(ns[i - 1] + ns[i]) < 27) {
-      sub[i] = sub[i] + (sub[i - 2] || 1);
-    }
-  }
-  return sub[ns.length - 1];
+
+  return dp[dp.length - 1];
 };
