@@ -3,29 +3,25 @@
  * @return {number}
  */
 var numTrees = function(n) {
-  let subNumTrees = {};
-  for (let i = 0; i <= n; i++) {
-    if (i <= 2) {
-      i === 0 && (subNumTrees[0] = 0);
-      i === 1 && (subNumTrees[1] = 1);
-      i === 2 && (subNumTrees[2] = 2);
-    } else {
-      let current = i - 1;
-      let currentLR = [];
-      let count = 0;
-      while (current >= 0) {
-        currentLR = [i - 1 - current, current];
-        if (!currentLR[0] || !currentLR[1]) {
-          count = count + (currentLR[0] ? subNumTrees[currentLR[0]] : subNumTrees[currentLR[1]]);
-        } else {
-          count = subNumTrees[currentLR[0]] * subNumTrees[currentLR[1]] + count;
-        }
-        current--;
-      }
-      subNumTrees[i] = count;
-    }
-  }
-  return subNumTrees[n];
-};
+  let dp = new Array(n + 1);
 
-module.exports = { solution: numTrees };
+  dp[0] = 0;
+
+  for (let i = 1; i <= n; i++) {
+    helper(i);
+  }
+
+  return dp[n];
+
+  function helper(a) {
+    if (dp[a] !== undefined) return dp[a];
+
+    dp[a] = 0;
+
+    for (let i = 1; i <= a; i++) {
+      dp[a] += (helper(i - 1) || 1) * (helper(a - i) || 1);
+    }
+
+    return dp[a];
+  }
+};
