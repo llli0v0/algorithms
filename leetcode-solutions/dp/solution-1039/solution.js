@@ -2,28 +2,27 @@
  * @param {number[]} A
  * @return {number}
  */
-/**
- * 这个需要优化 
- */
 var minScoreTriangulation = function(A) {
   let dp = {};
-  helper(A);
-  return dp[A.join()];
+
+  for (let i = 0; i < A.length; i++) {
+    A[i] = [A[i], i];
+  }
+
+  return helper(A);
 
   function helper(A) {
-    let k = A.join();
-    if (dp[k]) return dp[k];
+    let K = A[0][1] + '|' + A[A.length - 1][1];
+    
     if (A.length < 3) return 0;
-    if (A.length === 3) {
-      dp[k] = A[0] * A[1] * A[2];
-    } else {
-      dp[k] = Infinity;
-      for (let i = 1; i < A.length; i++) {
-        dp[k] = Math.min(dp[k],
-          A[0] * A[i] * A[1] + helper(A.slice(1, i + 1)) + helper([A[0]].concat(A.slice(i))),
-          A[0] * A[i] * A[i - 1] + helper(A.slice(0, i)) + helper([A[0]].concat(A.slice(i))));
-      }
+    if (dp[K]) return dp[K];
+
+    dp[K] = Infinity;
+
+    for (let i = 1; i < A.length - 1; i++) {
+      dp[K] = Math.min(dp[K], A[0][0] * A[i][0] * A[A.length - 1][0] + helper(A.slice(0, i + 1)) + helper(A.slice(i)));
     }
-    return dp[k]
+
+    return dp[K];
   }
 };
