@@ -4,18 +4,17 @@
  */
 var longestWPI = function(hours) {
   let H = [];
-  let result = 0;
-
+  
   for (let i = 0; i < hours.length; i++) {
     if (hours[i] > 8) {
       H.push(1);
-      result = 1;
     } else {
       H.push(-1);
     }
   }
-
+  
   let hash = {};
+  let result = 0;
   let S = 0;
 
   for (let i = 0; i < H.length; i++) {
