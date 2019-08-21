@@ -3,34 +3,35 @@
  * @return {number[]}
  */
 var countSmaller = function(nums) {
-  for (let i = 0; i < nums.length; i++) {
-    nums[i] = { index: i, val: nums[i] };
-  }
-  let counter = new Array(nums.length).fill(0);
-  mergeSort(nums);
-  return counter;
-  function mergeSort(nums) {
-    if (nums.length < 2) return nums;
-    let midIndex = Math.floor(nums.length / 2);
-    let left = mergeSort(nums.slice(0, midIndex));
-    let right = mergeSort(nums.slice(midIndex));
+  for (let i = 0; i < nums.length; i++) nums[i] = [nums[i], i];
+
+  let result = new Array(nums.length).fill(0);
+
+  helper(nums);
+
+  return result;
+
+  function helper(nums) {
+    if (!nums.length || nums.length === 1) return nums;
+
+    let M = Math.floor(nums.length / 2);
+
+    let L = helper(nums.slice(0, M));
+    let R = helper(nums.slice(M));
+
     let sorted = [];
-    while (left.length && right.length) {
-      /**
-       * Here's the key
-       * Normal merge sort, It's always going to sort left, right, in the forward order. But it's going to time out here.
-       * We can reverse order here
-       * 
-       * 正序归并排序会超时，这里倒序归并可以解决
-       */
-      if (right[right.length - 1].val < left[left.length - 1].val) {
-        counter[left[left.length - 1].index] += right.length;
-        sorted.unshift(left.pop());
+
+    while (L.length && R.length) {
+      if (R[0][0] >= L[0][0]) {
+        sorted.push(R.shift());
       } else {
-        sorted.unshift(right.pop());
+        result[L[0][1]] += R.length;
+        sorted.push(L.shift());
       }
     }
-    sorted = (left.length ? left : right).concat(sorted);
+
+    sorted = sorted.concat(L.length ? L : R);
+
     return sorted;
   }
 };
