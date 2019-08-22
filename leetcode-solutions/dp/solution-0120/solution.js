@@ -3,12 +3,13 @@
  * @return {number}
  */
 var minimumTotal = function(triangle) {
-  for (let i = triangle.length - 2; i >= 0; i--) {
-    for (let j = 0; j < triangle[i].length; j++) {
-      triangle[i][j] = Math.min(triangle[i][j] + triangle[i + 1][j], triangle[i][j] + triangle[i + 1][j + 1]);
+  let dp = triangle;
+
+  for (let i = dp.length - 2; i >= 0; i--) {
+    for (let j = 0; j < dp[i].length; j++) {
+      dp[i][j] += Math.min(dp[i + 1][j], dp[i + 1][j + 1]);
     }
   }
-  return triangle[0][0];
-};
 
-console.log(minimumTotal([[2],[3,4],[6,5,7],[4,1,8,3]]));
+  return dp[0][0];
+};
