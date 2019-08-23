@@ -33,11 +33,6 @@ var findInMountainArray = function(target, mountainArr) {
     let b = mountainArr.get(M);
     let c = M === len - 1 ? -Infinity : mountainArr.get(M + 1);
 
-    if (b > a && b > c) {
-      L = M;
-      break;
-    }
-
     if (b > a && c > b) {
       L = M + 1;
     } else {
