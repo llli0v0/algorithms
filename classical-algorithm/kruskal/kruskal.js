@@ -1,12 +1,12 @@
 class Node {
   constructor() {
-    this.belong = null;
+    this.parent = null;
   }
 
-  getBelong() {
-    if (!this.belong) return this;
+  get P() {
+    if (!this.parent) return this;
 
-    return this.belong.getBelong();
+    return this.parent.P;
   }
 }
 
@@ -22,8 +22,8 @@ function kurskal(paths, N) {
     if (M[path[0]] === undefined) M[path[0]] = new Node();
     if (M[path[1]] === undefined) M[path[1]] = new Node();
 
-    if (M[path[0]].getBelong() !== M[path[1]].getBelong()) {
-      M[path[0]].belong = M[path[1]].getBelong();
+    if (M[path[0]].P !== M[path[1]].P) {
+      M[path[0]].parent = M[path[1]].P;
 
       MST.push(path);
 
