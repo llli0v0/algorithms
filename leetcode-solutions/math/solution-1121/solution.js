@@ -4,18 +4,18 @@
  * @return {boolean}
  */
 var canDivideIntoSubsequences = function(nums, K) {
-  let A = [[nums[0], 1]];
-  let M = -Infinity;
+  let M = 1;
+  let N = -Infinity;
 
   for (let i = 1; i < nums.length; i++) {
-    if (nums[i] === A[A.length - 1][0]) {
-      A[A.length - 1][1] += 1;
+    if (nums[i] === nums[i - 1]) {
+      M++;
     } else {
-      A.push([nums[i], 1]);
+      M = 1;
     }
 
-    M = Math.max(M, A[A.length - 1][1]);
+    N = Math.max(M, N);
   }
 
-  return M * K <= nums.length;
+  return N * K <= nums.length;
 };
