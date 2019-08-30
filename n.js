@@ -4,24 +4,53 @@
  * @return {number[]}
  */
 var medianSlidingWindow = function(nums, k) {
+  if (k === 1) return nums;
+
   let a = nums.slice(0, k).map((item, index) => [item, index]).sort((b, c) => b[0] - c[0]);
 
   let mid = Math.floor(k / 2);
 
-  let maxHeap = new Heap(0);
-  maxHeap.isMaxHeap = true;
-  let minHeap = new Heap(0);
+  let L = new Heap(0);
+  L.isMaxHeap = true;
+  let R = new Heap(0);
 
-  for (let i = 0; i < mid; i++) maxHeap.heappush(a[i]);
-  for (let i = mid; i < k; i++) minHeap.heappush(a[i]);
+  for (let i = 0; i < mid; i++) L.heappush(a[i]);
+  for (let i = mid; i < k; i++) R.heappush(a[i]);
 
-  let M = k % 2 ? minHeap.heap[0] : (maxHeap.heap[0] + minHeap.heap[0]) / 2;
+  let result = [k % 2 ? R.heap[0][0] : (-L.heap[0][0] + R.heap[0][0]) / 2];
 
-  for (let i = k; i < nums.length; i++) {
-    if (nums[i] > M) {
-      
+  for (let i = 1; i + k - 1 < nums.length; i++) {
+    let M = result[result.length - 1];
+
+    if (nums[i + k - 1] >= M) {
+      R.heappush([nums[i + k - 1], i + k - 1]);
+
+      let f = false;
+
+      while (R.heap[0][1] < i) {
+        if (R.heappop()[1] === i - 1) f = true;
+      }
+
+      if (nums[i - 1] <= M && !f) L.heappush(R.heappop());
+    } else {
+      L.heappush([nums[i + k - 1], i + k - 1]);
+
+      let f = false;
+
+      while (L.heap[0][1] < i) {
+        if (L.heappop()[1] === i - 1) f = true;
+      }
+
+      if (nums[i - 1] >= M && !f) R.heappush(L.heappop());
     }
+
+    while (L.heap[0][1] < i) L.heappop();
+    while (R.heap[0][1] < i) R.heappop();
+
+    k % 2 ? result.push(R.heap[0][0]) : result.push((-L.heap[0][0] + R.heap[0][0]) / 2);
   }
+
+  return result;
 };
 
 class Heap {
@@ -29,12 +58,12 @@ class Heap {
    * 默认是最小堆
    * @param {string} key 作为比较项的key
    */
-  constructor(key = '') {
+  constructor(key) {
     this.heap = [];
     this.isMaxHeap = false;
-    this.compareKey = '';
+    this.compareKey = key;
 
-    if (key) {
+    if (key !== undefined) {
       this.comparetor = (a, b) => a[key] - b[key];
     } else {
       this.comparetor = (a, b) => a - b;
@@ -55,7 +84,7 @@ class Heap {
 
   heappush(item) {
     if (this.isMaxHeap) {
-      if (this.compareKey) {
+      if (this.compareKey !== undefined) {
         item[this.compareKey] = -item[this.compareKey];
       } else {
         item = -item;
@@ -109,7 +138,7 @@ class Heap {
     }
 
     if (this.isMaxHeap) {
-      if (this.compareKey) {
+      if (this.compareKey !== undefined) {
         popItem[this.compareKey] = -popItem[this.compareKey];
       } else {
         popItem = -popItem;
@@ -131,3 +160,5 @@ class Heap {
     return parentIndex * 2 + 2;
   }
 }
+// [-2147483648.0,-2147483648.0,-2147483648.0,-2147483648.0,-2147483648.0,2147483647.0,2147483647.0,2147483647.0,2147483647.0,2147483647.0,-2147483648.0]
+console.log(medianSlidingWindow([-2147483648,-2147483648,2147483647,-2147483648,-2147483648,-2147483648,2147483647,2147483647,2147483647,2147483647,-2147483648,2147483647,-2147483648], 3))
