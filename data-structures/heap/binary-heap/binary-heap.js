@@ -3,12 +3,12 @@ class Heap {
    * 默认是最小堆
    * @param {String} key 作为比较项的key
    */
-  constructor(key = '') {
+  constructor(key) {
     this.heap = [];
     this.isMaxHeap = false;
-    this.compareKey = '';
+    this.compareKey = key;
 
-    if (key) {
+    if (key !== undefined) {
       this.comparetor = (a, b) => a[key] - b[key];
     } else {
       this.comparetor = (a, b) => a - b;
@@ -29,7 +29,7 @@ class Heap {
 
   heappush(item) {
     if (this.isMaxHeap) {
-      if (this.compareKey) {
+      if (this.compareKey !== undefined) {
         item[this.compareKey] = -item[this.compareKey];
       } else {
         item = -item;
@@ -83,7 +83,7 @@ class Heap {
     }
 
     if (this.isMaxHeap) {
-      if (this.compareKey) {
+      if (this.compareKey !== undefined) {
         popItem[this.compareKey] = -popItem[this.compareKey];
       } else {
         popItem = -popItem;
