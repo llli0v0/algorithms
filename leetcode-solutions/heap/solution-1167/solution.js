@@ -1,3 +1,27 @@
+/**
+ * @param {number[]} sticks
+ * @return {number}
+ */
+var connectSticks = function(sticks) {
+  let heap = new Heap();
+
+  for (let i = 0; i < sticks.length; i++) {
+    heap.heappush(sticks[i]);
+  }
+
+  let result = 0;
+
+  while (heap.heap.length > 1) {
+    let a = heap.heappop() + heap.heappop();
+
+    result += a;
+
+    heap.heappush(a);
+  }
+
+  return result;
+};
+
 class Heap {
   /**
    * @param {String} key
@@ -104,5 +128,3 @@ class Heap {
     return parentIndex * 2 + 2;
   }
 }
-
-module.exports = Heap;
