@@ -4,66 +4,86 @@
  * @return {number}
  */
 var mergeStones = function(stones, K) {
-  if (stones.length === 1) return 0;
-  let dp = new Array(stones.length).fill(null).map(() => new Array(stones.length).fill(0));
-  let cases = [];
-  for (let i = 0; i < dp.length; i++) {
-    dp[i][i] = stones[i];
-  }
-  for (let i = 1; i < dp.length; i++) {
-    cases = [];
-    getAllCase(i + 1, K, '');
-    for (let d = 0; d < cases.length; d++) {
-      cases[d] = cases[d].slice(1).split('_').map(o => parseInt(o));
+  let C = {};
+  let S = {};
+  let dp = {};
+
+  let a = helper(0, stones.length - 1);
+
+  return a === -1 ? -1 : a[1];
+
+  function helper(s, e) {
+    if (s === e) return [stones[s], 0];
+
+    let key = [s, e].toString();
+
+    let N = 0;
+
+    if (S[key] !== undefined) {
+      N = S[key];
+    } else {
+      for (let i = s; i <= e; i++) N += stones[i];
+      S[key] = N;
     }
-    for (let x = 0; x < dp.length - i; x++) {
-      let currentCases = [];
-      for (let r = 0; r < cases.length; r++) {
-        currentCases.push([...cases[r]]);
-      }
-      let y = x + i;
-      if (cases.length === 0) {
-        dp[x][y] = -1;
-        continue;
-      }
-      for (let w = 0; w < currentCases.length; w++) {
-        for (let q = 0; q < currentCases[w].length; q++) {
-          if (q === 0) {
-            currentCases[w][q] = [x, x + currentCases[w][q] - 1];
-          } else {
-            currentCases[w][q] = [currentCases[w][q - 1][1] + 1, currentCases[w][q - 1][1] + currentCases[w][q]];
-          }
-        }
-      }
-      let best = Infinity;
-      for (let n = 0; n < currentCases.length; n++) {
-        let sum = 0;
-        let lastStepSum = 0;
-        for (let m = 0; m < currentCases[n].length; m++) {
-          if (currentCases[n][m][1] - currentCases[n][m][0] !== 0) {
-            for (let t = currentCases[n][m][0]; t <= currentCases[n][m][1]; t++) {
-              lastStepSum += stones[t];
-            }
-          }
-          sum += dp[currentCases[n][m][0]][currentCases[n][m][1]];
-        }
-        best = Math.min(best, sum + lastStepSum);
-      }
-      dp[x][y] = best;
+
+    if (dp[key] !== undefined) return [N, dp[key]];
+
+    dp[key] = Infinity;
+
+    let l = e - s + 1;
+    let compose;
+
+    if (C[l] === undefined) {
+      C[l] = [];
+      getCompose(l, K, [], l);
     }
+
+    compose = C[l];
+
+    for (let i = 0; i < compose.length; i++) {
+      let c = compose[i];
+
+      let cur = s;
+
+      let a = 0;
+
+      for (let j = 0; j < c.length; j++) {
+        let b = helper(cur, cur + c[j] - 1);
+
+        if (b === -1) {
+          a += Infinity;
+        } else {
+          a += b[0] + b[1];
+        }
+
+        cur += c[j];
+      }
+
+      dp[key] = Math.min(dp[key], a);
+    }
+
+    if (dp[key] > 10**9) return -1;
+
+    return [N, dp[key]];
   }
-  return dp[0][dp.length - 1];
-  function getAllCase(l, c, s) {
-    if (c === K && (l - 1) % (K - 1)) return;
-    if (c === 1 && (l - 1) % (K - 1) === 0) {
-      cases.push(s + '_' + l);
+
+  function getCompose(L, k, c, l) {
+    if (k === 0) {
+      if (L === 0) {
+        C[l].push(c);
+      }
       return;
     }
-    let n = 0;
-    while ((K - 1) * n + 1 < l) {
-      let newl = l - ((K - 1) * n + 1);
-      getAllCase(newl, c - 1, s + '_' + (((K - 1) * n) + 1));
-      n++;
+
+    for (let i = 1; i <= L; i++) {
+      if (check(i)) {
+        getCompose(L - i, k - 1, c.concat([i]), l);
+      }
+    }
+
+    function check(n) {
+      while (n > 1) n = n - K + 1;
+      return n === 1;
     }
   }
 };
