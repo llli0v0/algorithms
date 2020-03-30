@@ -21,15 +21,10 @@ var minFallingPathSum = function(arr) {
     if (M[a] === undefined) {
       M[a] = [];
       for (let i = 0; i < arr[a].length; i++) M[a].push([arr[a][i] + helper(a - 1, i), i]);
-      M[a].sort((x, y) => x[0] - y[0]);
+      M[a] = M[a].sort((x, y) => x[0] - y[0]).slice(0, 2);
     }
 
-    for (let i = 0; i < M[a].length; i++) {
-      if (M[a][i][1] !== b) {
-        dp[a][b] = M[a][i][0];
-        break;
-      }
-    }
+    dp[a][b] = M[a][0][1] === b ? M[a][1][0] : M[a][0][0];
 
     return dp[a][b];
   }
