@@ -10,7 +10,7 @@ var longestPrefix = function(s) {
   let result = 0;
 
   for (let i = 0; i < s.length - 1; i++) {
-    l = (l * 2 % mod + s[i].charCodeAt() - 96) % mod;
+    l = (l * 2 + s[i].charCodeAt() - 96) % mod;
     r = (r + (s[s.length - 1 - i].charCodeAt() - 96) * n) % mod;
     n = n * 2 % mod;
     if (l === r) result = i + 1;
