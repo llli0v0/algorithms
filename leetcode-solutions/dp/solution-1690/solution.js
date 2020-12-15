@@ -8,6 +8,7 @@ var stoneGameVII = function(stones) {
 
   function dp(l, r, p, sum) {
     if (l >= r) return 0;
+    
     let key = `${l} ${r}`;
     if (computed[key] !== undefined) return computed[key];
     if (p) {
