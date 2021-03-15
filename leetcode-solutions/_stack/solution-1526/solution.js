@@ -2,7 +2,7 @@
  * @param {number[]} target
  * @return {number}
  */
- var minNumberOperations = function(target) {
+var minNumberOperations = function(target) {
   let stack = [target[0]];
   for (let i = 1; i < target.length; i++) {
     if (stack.length === 1) {
