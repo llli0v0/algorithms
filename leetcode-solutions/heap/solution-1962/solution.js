@@ -1,3 +1,26 @@
+/**
+ * @param {number[]} piles
+ * @param {number} k
+ * @return {number}
+ */
+var minStoneSum = function(piles, k) {
+  let heap = new Heap();
+  heap.isMaxHeap = true;
+  let sum = 0;
+  for (let i = 0; i < piles.length; i++) {
+    heap.heappush(piles[i]);
+    sum += piles[i];
+  }
+  while (k) {
+    let cur = heap.heappop();
+    let a = Math.floor(cur / 2);
+    sum -= a;
+    heap.heappush(cur - a);
+    k--;
+  }
+  return sum;
+};
+
 class Heap {
   /**
    * @param {String} key
@@ -110,5 +133,3 @@ class Heap {
     return parentIndex * 2 + 2;
   }
 }
-
-module.exports = Heap;
