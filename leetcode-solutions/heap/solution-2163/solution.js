@@ -1,3 +1,61 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minimumDifference = function(nums) {
+  for (let i = 0; i < nums.length; i++) {
+    nums[i] = { index: i, val: nums[i] };
+  }
+  let leftMaxHeap = new Heap('val');
+  leftMaxHeap.isMaxHeap = true;
+  let leftSum = 0;
+  for (let i = 0; i < nums.length / 3; i++) {
+    leftMaxHeap.heappush({ val: nums[i].val, index: nums[i].index });
+    leftSum += nums[i].val;
+  }
+  let handleLeft = (i) => {
+    leftMaxHeap.heappush({ val: nums[i].val, index: nums[i].index });
+    leftSum += nums[i].val;
+    leftSum -= leftMaxHeap.heappop().val;
+  };
+  let rightMaxHeap = new Heap('val');
+  rightMaxHeap.isMaxHeap = true;
+  let inRightHeap = new Set();
+  for (let i = nums.length / 3; i < nums.length; i++) {
+    rightMaxHeap.heappush({ val: nums[i].val, index: nums[i].index });
+    inRightHeap.add(nums[i].index);
+  }
+  let rightSum = 0;
+  while (rightMaxHeap.heap.length > nums.length / 3) {
+    let item = rightMaxHeap.heappop();
+    rightSum += item.val;
+    inRightHeap.delete(item.index);
+  }
+  let handleRight = (i) => {
+    if (inRightHeap.has(i)) {
+      inRightHeap.delete(i);
+      return;
+    }
+    let item;
+    while (rightMaxHeap.heap.length) {
+      item = rightMaxHeap.heappop();
+      if (inRightHeap.has(item.index)) {
+        inRightHeap.delete(item.index);
+        break;
+      }
+    }
+    rightSum -= nums[i].val;
+    rightSum += item ? item.val : 0;
+  };
+
+  let result = leftSum - rightSum;
+  for (let i = nums.length / 3; i < nums.length / 3 * 2; i++) {
+    handleLeft(i);
+    handleRight(i);
+    result = Math.min(result, leftSum - rightSum);
+  }
+  return result;
+};
 class Heap {
   /**
    * @param {String} key
@@ -110,5 +168,3 @@ class Heap {
     return parentIndex * 2 + 2;
   }
 }
-
-module.exports = Heap;
