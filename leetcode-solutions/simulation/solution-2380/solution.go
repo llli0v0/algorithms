@@ -1,4 +1,4 @@
-package solution
+package solution2380
 
 func secondsToRemoveOccurrences(s string) (res int) {
 	runes := []rune(s)

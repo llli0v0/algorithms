@@ -1,4 +1,4 @@
-package solution
+package solution2420
 
 func goodIndices(nums []int, k int) (res []int) {
 	ilen, dlen := 1, 1
