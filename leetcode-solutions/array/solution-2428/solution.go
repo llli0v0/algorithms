@@ -4,7 +4,7 @@ import "math"
 
 func maxSum(grid [][]int) (res int) {
     for i, v := range grid {
-        for j, _ := range v {
+        for j := range v {
             if i >= 2 && j >= 2 {
                 var val int
                 for m := i; m > i-3; m-- {
