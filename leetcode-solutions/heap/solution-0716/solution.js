@@ -1,3 +1,112 @@
+class LinkNode {
+  constructor(val) {
+    this.pre = null;
+    this.next = null;
+    this.val = val;
+  }
+}
+
+var MaxStack = function() {
+  this.head = null;
+  this.tail = null;
+  this.nodeMap = {};
+  this.heap = new Heap(undefined, true);
+};
+
+/** 
+ * @param {number} x
+ * @return {void}
+ */
+MaxStack.prototype.push = function(x) {
+  let node = new LinkNode(x);
+  if (this.head === null) {
+    this.head = this.tail = node;
+  } else {
+    this.tail.next = node;
+    this.tail.next.pre = this.tail;
+    this.tail = this.tail.next;
+  }
+  this.nodeMap[x] = this.nodeMap[x] ?? [];
+  this.nodeMap[x].push(node);
+  this.heap.heappush(x);
+};
+
+/**
+ * @return {number}
+ */
+MaxStack.prototype.pop = function() {
+  let top = this.tail;
+  this.nodeMap[top.val].pop();
+  if (top.pre) {
+    top.pre.next = null;
+    this.tail = top.pre;
+    top.pre = null;
+  } else {
+    this.head = this.tail = null;
+  }
+  return top.val;
+};
+
+/**
+ * @return {number}
+ */
+MaxStack.prototype.top = function() {
+  return this.tail.val;
+};
+
+/**
+ * @return {number}
+ */
+MaxStack.prototype.peekMax = function() {
+  while(true) {
+    let big = -this.heap.heap[0];
+    if (this.nodeMap[big].length) {
+      return big;
+    } else {
+      this.heap.heappop();
+    }
+  }
+};
+
+/**
+ * @return {number}
+ */
+MaxStack.prototype.popMax = function() {
+  while(true) {
+    let big = this.heap.heappop();
+    if (this.nodeMap[big].length) {
+      let node = this.nodeMap[big].pop();
+      if (node.pre && node.next) {
+        node.pre.next = node.next;
+        node.next.pre = node.pre;
+        node.next = null;
+        node.pre = null;
+      } else if (node.next) {
+        this.head = node.next;
+        this.head.pre = null;
+        node.next = null;
+      } else if (node.pre) {
+        this.tail = node.pre;
+        this.tail.next = null;
+        node.pre = null;
+      } else {
+        this.head = this.tail = null;
+      }
+      return node.val;
+    }
+  }
+};
+
+/**
+ * Your MaxStack object will be instantiated and called as such:
+ * var obj = new MaxStack()
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.peekMax()
+ * var param_5 = obj.popMax()
+ */
+
 class Heap {
   /**
    * @param {String} key
@@ -110,5 +219,3 @@ class Heap {
     return parentIndex * 2 + 2;
   }
 }
-
-module.exports = Heap;
