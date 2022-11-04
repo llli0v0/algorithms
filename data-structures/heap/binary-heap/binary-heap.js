@@ -1,17 +1,7 @@
 class Heap {
-  /**
-   * @param {String} key
-   */
-  constructor(key, isMaxHeap = false) {
-    this.heap = [];
-    this.isMaxHeap = isMaxHeap;
-    this.compareKey = key;
-
-    if (key !== undefined) {
-      this.comparetor = (a, b) => a[key] - b[key];
-    } else {
-      this.comparetor = (a, b) => a - b;
-    }
+  constructor(comparetor) {
+    this.list = [];
+    this.comparetor = comparetor ?? ((a, b) => a - b);
   }
 
   lessThan(a, b) {
@@ -27,74 +17,40 @@ class Heap {
   }
 
   heappush(item) {
-    if (this.isMaxHeap) {
-      if (this.compareKey !== undefined) {
-        item[this.compareKey] = -item[this.compareKey];
-      } else {
-        item = -item;
-      }
-    }
-
-    this.heap.push(item);
-
-    let index = this.heap.length - 1;
-    let parentIndex = this.getParentIndex(index);
-
-    while (parentIndex >= 0 && this.biggerThan(this.heap[parentIndex], this.heap[index])) {
-      let temp = this.heap[parentIndex];
-
-      this.heap[parentIndex] = this.heap[index];
-      this.heap[index] = temp;
-      index = parentIndex;
-      parentIndex = this.getParentIndex(index);
+    let { list, getParentIndex } = this;
+    list.push(item);
+    let index = list.length - 1;
+    let pIndex = getParentIndex(index);
+    while (pIndex >= 0 && this.biggerThan(list[pIndex], list[index])) {
+      let temp = list[pIndex];
+      list[pIndex] = list[index];
+      list[index] = temp;
+      index = pIndex;
+      pIndex = getParentIndex(index);
     }
   }
 
   heappop() {
-    if (this.heap.length <= 1) {
-      let popItem = this.heap.pop();
-      if (this.isMaxHeap && this.compareKey) {
-        popItem[this.compareKey] = -popItem[this.compareKey];
-      }
-      return this.isMaxHeap ? -popItem : popItem;
-    }
-
-    let popItem = this.heap[0];
-    this.heap[0] = this.heap.pop();
-
+    let { list, getLeftChildIndex, getRightChildIndex } = this;
+    if (list.length <= 1) return list.pop();
+    let popItem = list[0];
+    list[0] = list.pop();
     let index = 0;
-    let leftChildIndex = this.getLeftChildIndex(index);
-    let rightChildIndex = this.getRightChildIndex(index);
-
+    let [leftChildIndex, rightChildIndex] = [getLeftChildIndex(index), getRightChildIndex(index)];
     while (
-      leftChildIndex < this.heap.length && this.biggerThan(this.heap[index], this.heap[leftChildIndex]) ||
-      rightChildIndex < this.heap.length && this.biggerThan(this.heap[index], this.heap[rightChildIndex])
+      leftChildIndex < list.length && this.biggerThan(list[index], list[leftChildIndex]) ||
+      rightChildIndex < list.length && this.biggerThan(list[index], list[rightChildIndex])
     ) {
       let swapIndex;
-
-      if (leftChildIndex < this.heap.length && rightChildIndex < this.heap.length) {
-        swapIndex = this.lessThan(this.heap[leftChildIndex], this.heap[rightChildIndex]) ? leftChildIndex : rightChildIndex;
+      if (leftChildIndex < list.length && rightChildIndex < list.length) {
+        swapIndex = this.lessThan(list[leftChildIndex], list[rightChildIndex]) ? leftChildIndex : rightChildIndex;
       } else {
         swapIndex = leftChildIndex;
       }
-
-      let temp = this.heap[index];
-
-      this.heap[index] = this.heap[swapIndex];
-      this.heap[swapIndex] = temp;
+      [list[index], list[swapIndex]] = [list[swapIndex], list[index]];
       index = swapIndex;
-      leftChildIndex = this.getLeftChildIndex(index);
-      rightChildIndex = this.getRightChildIndex(index);
+      [leftChildIndex, rightChildIndex] = [getLeftChildIndex(index), getRightChildIndex(index)]
     }
-
-    if (this.isMaxHeap) {
-      if (this.compareKey !== undefined) {
-        popItem[this.compareKey] = -popItem[this.compareKey];
-      } else {
-        popItem = -popItem;
-      }
-    }
-
     return popItem;
   }
 

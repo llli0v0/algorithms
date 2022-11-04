@@ -48,7 +48,7 @@ class HuffmanTree {
       if (this.counter[str[i]] === undefined) this.counter[str[i]] = 0;
       this.counter[str[i]] += 1;
     }
-    let heap = new Heap('val');
+    let heap = new Heap((a, b) => a.val - b.val);
     for (let key in this.counter) {
       let node = new TreeNode(this.counter[key]);
       node.key = key;
