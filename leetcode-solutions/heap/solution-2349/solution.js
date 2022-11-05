@@ -1,4 +1,50 @@
-class Heap {
+var NumberContainers = function() {
+  this.indexMap = new Map();
+  this.numberMap = new Map();
+};
+
+/** 
+ * @param {number} index 
+ * @param {number} number
+ * @return {void}
+ */
+NumberContainers.prototype.change = function(index, number) {
+  let { indexMap, numberMap, heapCompera } = this;
+  if (indexMap.has(index)) {
+    let oldn = indexMap.get(index);
+    numberMap.get(oldn).set.delete(index);
+  }
+  indexMap.set(index, number);
+  if (!numberMap.has(number)) numberMap.set(number, { set: new Set(), heap: new Heap() });
+  let { set, heap } = numberMap.get(number);
+  set.add(index);
+  heap.push(index);
+};
+
+/** 
+ * @param {number} number
+ * @return {number}
+ */
+NumberContainers.prototype.find = function(number) {
+  let { numberMap } = this;
+  if (!numberMap.has(number)) return -1;
+  let { set, heap } = numberMap.get(number);
+  while (heap.list.length) {
+    let index = heap.list[0];
+    if (set.has(index)) return index;
+    else heap.pop();
+  }
+  return -1;
+};
+
+/**
+ * Your NumberContainers object will be instantiated and called as such:
+ * var obj = new NumberContainers()
+ * obj.change(index,number)
+ * var param_2 = obj.find(number)
+ */
+
+ class Heap {
   constructor(comparetor) {
     this.list = [];
     this.comparetor = comparetor ?? ((a, b) => a - b);
@@ -64,5 +110,3 @@ class Heap {
     return parentIndex * 2 + 2;
   }
 }
-
-module.exports = Heap;
