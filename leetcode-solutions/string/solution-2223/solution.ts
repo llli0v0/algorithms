@@ -1,4 +1,4 @@
-function Z(s) {
+function sumScores(s: string): number {
   let z = new Array(s.length).fill(0);
   let l = 0;
   let r = 0;
@@ -23,5 +23,6 @@ function Z(s) {
       }
     }
   }
-  return z;
-}
+  z[0] = s.length;
+  return z.reduce((a, b) => a + b);
+};

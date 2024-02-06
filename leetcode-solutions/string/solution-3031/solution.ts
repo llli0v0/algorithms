@@ -11,7 +11,7 @@ function minimumTimeToInitialState(word: string, k: number): number {
       z[i] = r - l;
       r--;
     } else {
-      if (r - i > z[i - l]) {
+      if (r - i + 1 > z[i - l]) {
         z[i] = z[i - l];
       } else {
         l = i;
