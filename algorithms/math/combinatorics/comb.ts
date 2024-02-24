@@ -7,3 +7,5 @@ function comb(n: bigint, m: bigint): bigint {
   dp.set(key, comb(n - 1n, m - 1n) + comb(n - 1n, m));
   return dp.get(key)!;
 }
+
+export { comb };
