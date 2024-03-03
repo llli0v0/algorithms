@@ -4,4 +4,4 @@
 
 Difficulty | 🟢 Easy | 🟡 Medium | 🔴 Hard
 :---: | :---: | :---: | :---:
-Solved | 80 | 554 | 431
+Solved | 80 | 554 | 432
