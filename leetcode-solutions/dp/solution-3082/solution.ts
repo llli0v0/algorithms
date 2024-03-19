@@ -10,7 +10,6 @@ function sumOfPower(nums: number[], k: number): number {
   return solve(nums.length - 1, k);
 
   function solve(idx: number, n: number): number {
-    console.log(idx, n);
     if (n === 0) return pows[idx];
     else if (n < 0) return 0;
     else if (idx < 0) return 0;
